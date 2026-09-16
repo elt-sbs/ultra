@@ -91,3 +91,4 @@ find ./scrapers/ -mindepth 2 -name package -print0 | while read -d $'\0' f; do
 done
 
 cp index.html "$outdir"/index.html
+cp scraperlist.js "$outdir"/scraperlist.js
