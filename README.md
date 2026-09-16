@@ -1,4 +1,4 @@
-# Template for creating Stash scrapers source index
+# NON-CDP, NON-PYTHON Scrapers for Stash
 
 This template allows you to create a new repository with a few clicks with preconfigured GitHub action to publish your scrapers source index. 
 _This assumes you already know how to create scrapers for Stash. If you don't, first read [this](https://docs.stashapp.cc/in-app-manual/scraping/scraperdevelopment/)._
