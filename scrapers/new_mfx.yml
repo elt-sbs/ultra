@@ -1,0 +1,90 @@
+name: Fetishpedia API Scraper
+
+# 1. Performer by Name
+performerByName:
+  - action: scrapeJson
+    query:
+      - url: "https://api.fetishpedia.xyz/perf?search={$name}"
+        scraper: performerSearchScraper
+
+# 2. Performer by URL
+performerByURL:
+  - action: scrapeJson
+    url:
+      # Replace this regex to match the target site URLs you plan to paste into Stash
+      - https://newmfx\.com/cast/.*
+    # queryURL intercepts the pasted URL and proxies the search to your Worker API
+    queryURL: "https://api.fetishpedia.xyz/perf?search={url}"
+    scraper: performerSearchScraper
+
+# 3. Performer by Fragment
+performerByFragment:
+  action: scrapeJson
+  queryURL: "https://api.fetishpedia.xyz/perf?search={name}"
+  scraper: performerSearchScraper
+
+# 4. Scene by Name (Stash maps this to sceneByQuery)
+sceneByQuery:
+  - action: scrapeJson
+    query:
+      - url: "https://api.fetishpedia.xyz/scene?search={$title}"
+        scraper: sceneSearchScraper
+
+# 5. Scene by URL
+sceneByURL:
+  - action: scrapeJson
+    url:
+      # Replace this regex to match the target site URLs you plan to paste into Stash
+      - https://newmfx\.com/scenes/.*
+    queryURL: "https://api.fetishpedia.xyz/scene?search={url}"
+    scraper: sceneSearchScraper
+
+# 6. Scene by Fragment
+sceneByFragment:
+  action: scrapeJson
+  # Stash can inject {title}, {filename}, or {checksum} into the fragment queryURL
+  queryURL: "https://api.fetishpedia.xyz/scene?search={title}"
+  scraper: sceneSearchScraper
+
+jsonScrapers:
+  performerSearchScraper:
+    performer:
+      Name:
+        jsonPath: $..name
+      Gender:
+        fixed: FEMALE
+      HairColor:
+        jsonPath: $..hair_color
+      EyeColor:
+        jsonPath: $..eye_color
+      Height:
+        jsonPath: $..height
+      URL:
+        jsonPath: $..urls[*]
+      Image:
+        jsonPath: $..image
+      Details:
+        jsonPath: $..tattoos
+        format: "Tattoos: {}"
+
+  sceneSearchScraper:
+    scene:
+      Title:
+        jsonPath: $..title
+      Details:
+        jsonPath: $..details
+      Code:
+        jsonPath: $..code
+      Studio:
+        Name:
+          jsonPath: $..studio
+      Tags:
+        Name:
+          jsonPath: $..tags[*]
+      Performers:
+        Name:
+          jsonPath: $..performers[*]
+      URL:
+        jsonPath: $..urls[*]
+      Image:
+        jsonPath: $..image

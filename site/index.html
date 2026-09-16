@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Custom Stash Scrapers Feed</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; line-height: 1.6; }
+    .card { border: 1px solid #e1e4e8; border-radius: 6px; padding: 16px; margin-bottom: 12px; }
+    code { background: #f6f8fa; padding: 2px 6px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h1>Custom Stash Scraper Index</h1>
+  <p>Add this source URL to your Stash settings under <strong>Metadata Providers</strong>:</p>
+  <p><code id="feed-url"></code></p>
+
+  <h2>Available Scrapers</h2>
+  <div id="scrapers">Loading available scrapers...</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/js-yaml/dist/js-yaml.min.js"></script>
+  <script>
+    const feedUrl = window.location.href.replace(/\/$/, '') + '/index.yml';
+    document.getElementById('feed-url').textContent = feedUrl;
+
+    fetch('index.yml')
+      .then(res => res.text())
+      .then(yamlText => {
+        const data = jsyaml.load(yamlText);
+        const container = document.getElementById('scrapers');
+        container.innerHTML = data.map(item => `
+          <div class="card">
+            <h3>${item.name} <code>v${item.version}</code></h3>
+            <p><strong>ID:</strong> ${item.id} | <strong>Updated:</strong> ${item.date}</p>
+          </div>
+        `).join('');
+      });
+  </script>
+</body>
+</html>
